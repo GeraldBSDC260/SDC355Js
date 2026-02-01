@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerald Blackwell | Portfolio</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #555;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 2rem;
+        }
+
+        .projects img {
+            width: 200px;
+            margin: 10px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        form button {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1 id="welcomeMessage">Welcome!</h1>
+</header>
+
+<nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<section id="about">
+    <h2>About Me</h2>
+    <p>
+        Hello! My name is Gerald Blackwell, and I am a student learning web
+        development. I enjoy building websites using HTML, CSS, and JavaScript
+        and am working toward creating a professional online portfolio.
+    </p>
+</section>
+
+<section id="projects" class="projects">
+    <h2>Projects</h2>
+
+    <a href="https://github.com/yourUsername/project1" target="_blank">
+        <img src="https://via.placeholder.com/200" alt="Project 1">
+    </a>
+
+    <a href="https://github.com/yourUsername/project2" target="_blank">
+        <img src="https://via.placeholder.com/200" alt="Project 2">
+    </a>
+
+    <a href="https://github.com/yourUsername/project3" target="_blank">
+        <img src="https://via.placeholder.com/200" alt="Project 3">
+    </a>
+</section>
+
+<section id="contact">
+    <h2>Contact</h2>
+
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email Address" required>
+        <input type="text" placeholder="Subject" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</section>
+
+<script>
+    // Prompt user for their name
+    var userName = prompt("Please enter your name:");
+
+    // Display personalized welcome message
+    if (userName) {
+        document.getElementById("welcomeMessage").textContent =
+            "Welcome to my portfolio, " + userName + "!";
+    }
+</script>
+
+</body>
+</html>
