@@ -11,107 +11,143 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    background: white;
-    color: black;
+    background: #fafafa;
+    color: #222;
+    transition: background 0.3s, color 0.3s;
 }
 
 header {
-    background-color: #333;
+    background: linear-gradient(135deg, #222, #444);
     color: white;
-    padding: 1rem;
+    padding: 2rem;
     text-align: center;
 }
 
 nav {
-    background-color: #555;
-    padding: 0.5rem;
+    background-color: #333;
+    padding: 1rem;
     text-align: center;
 }
 
 nav a {
     color: white;
-    margin: 0 15px;
+    margin: 0 18px;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ffd700;
 }
 
 section {
-    padding: 2rem;
+    padding: 2.5rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+.projects {
+    text-align: center;
 }
 
 .projects img {
     width: 200px;
-    margin: 10px;
+    margin: 15px;
+    border-radius: 10px;
+    transition: transform 0.3s;
 }
 
-/* Featured Content Styling */
+.projects img:hover {
+    transform: scale(1.05);
+}
+
+/* Featured Content */
 .featured-box {
-    border: 2px solid #333;
-    padding: 15px;
-    margin: 10px 0;
-    background: #f2f2f2;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Dark Mode */
 .dark-mode {
-    background-color: #121212;
-    color: white;
+    background: #121212;
+    color: #f2f2f2;
 }
 
 .dark-mode header,
 .dark-mode nav {
-    background-color: black;
+    background: black;
 }
 
 .dark-mode .featured-box {
-    background: #333;
-    border-color: white;
+    background: #1e1e1e;
 }
 
+/* Form */
 form input, form textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
 form button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #555;
+}
+
+/* Toggle */
+.toggle-box {
+    text-align: right;
     padding: 10px 20px;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Dark Mode Toggle -->
-<label style="margin:10px; display:block;">
-    Dark Mode
-    <input type="checkbox" id="darkToggle">
-</label>
+<div class="toggle-box">
+Dark Mode <input type="checkbox" id="darkToggle">
+</div>
 
 <header>
 <h1 id="welcomeMessage">Welcome!</h1>
+<p>Web Development Student at ECPI</p>
 </header>
 
 <nav>
 <a href="#about">About</a>
+<a href="#featured">Featured</a>
 <a href="#projects">Projects</a>
 <a href="#contact">Contact</a>
 </nav>
 
-<!-- ABOUT -->
 <section id="about">
 <h2>About Me</h2>
 
 <p>
 Hello! My name is Gerald Blackwell, and I am a student at ECPI learning web
-development. I enjoy Online Gaming, Anime, Movies and Music.
+development. I enjoy online gaming, anime, movies, and music. I am building
+skills in programming and web development.
 </p>
 
-<h3>My Skills</h3>
+<h3>Technical Skills</h3>
 <ul id="skillsList"></ul>
 </section>
 
-<!-- FEATURED CONTENT -->
 <section id="featured">
 <h2>Featured Content</h2>
 
@@ -124,56 +160,53 @@ development. I enjoy Online Gaming, Anime, Movies and Music.
 <h3>Personal Projects</h3>
 
 <a href="https://github.com/GeraldBSDC260" target="_blank">
-<img src="https://via.placeholder.com/200" alt="Project">
+<img src="https://via.placeholder.com/200" alt="GitHub Projects">
 </a>
 </div>
 </section>
 
-<!-- PROJECTS -->
 <section id="projects" class="projects">
 <h2>Projects</h2>
 
-<img class="project" src="https://via.placeholder.com/200">
-<img class="project" src="https://via.placeholder.com/200">
-<img class="project" src="https://via.placeholder.com/200">
+<img class="project" src="https://via.placeholder.com/200" alt="Project">
+<img class="project" src="https://via.placeholder.com/200" alt="Project">
+<img class="project" src="https://via.placeholder.com/200" alt="Project">
 
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
-<h2>Contact</h2>
+<h2>Contact Me</h2>
 
 <form id="contactForm">
 <input type="text" id="nameInput" placeholder="Your Name" required>
 <input type="email" placeholder="Your Email Address" required>
 <input type="text" placeholder="Subject" required>
 <textarea placeholder="Your Message" rows="5" required></textarea>
-<button type="submit">Submit</button>
+<button type="submit">Send Message</button>
 </form>
 </section>
 
 <script>
 
-// Welcome message
-var userName = prompt("Please enter your name:");
+// Personalized welcome
+const userName = prompt("Please enter your name:");
 if (userName) {
     document.getElementById("welcomeMessage").textContent =
-        "Welcome to my portfolio, " + userName + "!";
+        `Welcome to my portfolio, ${userName}!`;
 }
 
-// ---------- SKILLS LOOP ----------
+// Skills loop
 const skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
-const list = document.getElementById("skillsList");
+const skillsList = document.getElementById("skillsList");
 
 skills.forEach(skill => {
     const li = document.createElement("li");
     li.textContent = skill;
-    list.appendChild(li);
+    skillsList.appendChild(li);
 });
 
-// ---------- CONDITIONAL LOGIC ----------
+// Conditional Featured Content
 const projectCount = document.querySelectorAll(".project").length;
-
 const uniDiv = document.getElementById("universityResources");
 const projectDiv = document.getElementById("personalProjects");
 
@@ -185,19 +218,16 @@ if (projectCount < 3) {
     uniDiv.style.display = "none";
 }
 
-// ---------- DARK MODE ----------
-const toggle = document.getElementById("darkToggle");
-
-toggle.addEventListener("change", () => {
+// Dark mode toggle
+document.getElementById("darkToggle")
+.addEventListener("change", () => {
     document.body.classList.toggle("dark-mode");
 });
 
-// ---------- FORM INTERACTIVITY ----------
-const form = document.getElementById("contactForm");
-const nameInput = document.getElementById("nameInput");
-
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
+// Form interaction
+document.getElementById("contactForm")
+.addEventListener("submit", e => {
+    e.preventDefault();
     alert(`Thank you, ${nameInput.value}, your message has been sent!`);
 });
 
