@@ -114,6 +114,25 @@ form button:hover {
     padding: 10px 20px;
     font-weight: bold;
 }
+
+/* Dynamic Notification */
+.notification {
+    background: #ffd700;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Highlight Effect */
+.highlight-border {
+    border: 3px solid #ffd700;
+}
+
+/* Status Message */
+#statusMessage {
+    margin-top: 10px;
+    font-weight: bold;
+}
 </style>
 </head>
 
@@ -184,18 +203,20 @@ skills in programming and web development.
 <textarea placeholder="Your Message" rows="5" required></textarea>
 <button type="submit">Send Message</button>
 </form>
+
+<div id="statusMessage"></div>
 </section>
 
 <script>
 
-// Personalized welcome
+/* Personalized Welcome */
 const userName = prompt("Please enter your name:");
 if (userName) {
     document.getElementById("welcomeMessage").textContent =
         `Welcome to my portfolio, ${userName}!`;
 }
 
-// Skills loop
+/* Populate Skills List */
 const skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
 const skillsList = document.getElementById("skillsList");
 
@@ -205,30 +226,50 @@ skills.forEach(skill => {
     skillsList.appendChild(li);
 });
 
-// Conditional Featured Content
-const projectCount = document.querySelectorAll(".project").length;
-const uniDiv = document.getElementById("universityResources");
-const projectDiv = document.getElementById("personalProjects");
+/* Modify Existing Elements */
+document.querySelector("#about h2").style.color = "#333";
+document.getElementById("featured")
+.classList.add("highlight-border");
 
-if (projectCount < 3) {
-    uniDiv.style.display = "block";
-    projectDiv.style.display = "block";
-} else {
-    projectDiv.style.display = "block";
-    uniDiv.style.display = "none";
-}
+/* Dynamically Add New Project Message */
+const newProjectMessage = document.createElement("p");
+newProjectMessage.textContent =
+    "Recently, I built a Target Heart Rate Calculator using JavaScript.";
+document.getElementById("projects")
+.appendChild(newProjectMessage);
 
-// Dark mode toggle
+/* Delayed Notification */
+setTimeout(() => {
+    const notification = document.createElement("div");
+    notification.className = "notification";
+    notification.textContent =
+        "Welcome! Check out my latest JavaScript project below.";
+    document.body.insertBefore(notification, document.body.firstChild);
+}, 2000);
+
+/* Dark Mode Toggle */
 document.getElementById("darkToggle")
 .addEventListener("change", () => {
     document.body.classList.toggle("dark-mode");
 });
 
-// Form interaction
-document.getElementById("contactForm")
-.addEventListener("submit", e => {
-    e.preventDefault();
-    alert(`Thank you, ${nameInput.value}, your message has been sent!`);
+/* Timed Confirmation for Contact Form */
+const form = document.getElementById("contactForm");
+const statusMessage = document.getElementById("statusMessage");
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    statusMessage.textContent = "Sending message...";
+    statusMessage.style.color = "blue";
+
+    setTimeout(() => {
+        statusMessage.textContent =
+            `Message sent successfully! Thank you, ${nameInput.value}.`;
+        statusMessage.style.color = "green";
+    }, 3000);
+
 });
 
 </script>
