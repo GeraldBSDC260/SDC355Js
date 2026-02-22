@@ -62,7 +62,6 @@ section {
     transform: scale(1.05);
 }
 
-/* Featured Content */
 .featured-box {
     border-radius: 12px;
     padding: 20px;
@@ -71,7 +70,6 @@ section {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Dark Mode */
 .dark-mode {
     background: #121212;
     color: #f2f2f2;
@@ -86,7 +84,6 @@ section {
     background: #1e1e1e;
 }
 
-/* Form */
 form input, form textarea {
     width: 100%;
     padding: 12px;
@@ -102,20 +99,40 @@ form button {
     padding: 12px 25px;
     border-radius: 6px;
     cursor: pointer;
+    position: relative;
 }
 
 form button:hover {
     background: #555;
 }
 
-/* Toggle */
+.tooltip {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 8px;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+}
+
+form button:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
 .toggle-box {
     text-align: right;
     padding: 10px 20px;
     font-weight: bold;
 }
 
-/* Dynamic Notification */
 .notification {
     background: #ffd700;
     padding: 12px;
@@ -123,15 +140,49 @@ form button:hover {
     font-weight: bold;
 }
 
-/* Highlight Effect */
 .highlight-border {
     border: 3px solid #ffd700;
 }
 
-/* Status Message */
 #statusMessage {
     margin-top: 10px;
     font-weight: bold;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.modal-content button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #555;
 }
 </style>
 </head>
@@ -154,22 +205,26 @@ Dark Mode <input type="checkbox" id="darkToggle">
 <a href="#contact">Contact</a>
 </nav>
 
+<div id="welcomeModal" class="modal">
+  <div class="modal-content">
+    <h2>This page is a work in progress.</h2>
+    <button id="closeModalBtn">Close</button>
+  </div>
+</div>
+
 <section id="about">
 <h2>About Me</h2>
-
 <p>
 Hello! My name is Gerald Blackwell, and I am a student at ECPI learning web
 development. I enjoy online gaming, anime, movies, and music. I am building
 skills in programming and web development.
 </p>
-
 <h3>Technical Skills</h3>
 <ul id="skillsList"></ul>
 </section>
 
 <section id="featured">
 <h2>Featured Content</h2>
-
 <div id="universityResources" class="featured-box">
 <h3>University Resources</h3>
 <a href="https://www.ecpi.edu" target="_blank">ECPI Program Home Page</a>
@@ -177,7 +232,6 @@ skills in programming and web development.
 
 <div id="personalProjects" class="featured-box">
 <h3>Personal Projects</h3>
-
 <a href="https://github.com/GeraldBSDC260" target="_blank">
 <img src="https://via.placeholder.com/200" alt="GitHub Projects">
 </a>
@@ -186,92 +240,60 @@ skills in programming and web development.
 
 <section id="projects" class="projects">
 <h2>Projects</h2>
-
 <img class="project" src="https://via.placeholder.com/200" alt="Project">
 <img class="project" src="https://via.placeholder.com/200" alt="Project">
 <img class="project" src="https://via.placeholder.com/200" alt="Project">
-
 </section>
 
 <section id="contact">
 <h2>Contact Me</h2>
-
 <form id="contactForm">
 <input type="text" id="nameInput" placeholder="Your Name" required>
 <input type="email" placeholder="Your Email Address" required>
 <input type="text" placeholder="Subject" required>
 <textarea placeholder="Your Message" rows="5" required></textarea>
-<button type="submit">Send Message</button>
+<button type="submit">
+  Send Message
+  <span class="tooltip">Click to send your message!</span>
+</button>
 </form>
-
 <div id="statusMessage"></div>
 </section>
 
 <script>
+window.addEventListener("load", () => {
+  const modal = document.getElementById("welcomeModal");
+  const closeBtn = document.getElementById("closeModalBtn");
+  modal.style.display = "block";
+  closeBtn.addEventListener("click", () => modal.style.display = "none");
+  window.addEventListener("click", e => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+});
 
-/* Personalized Welcome */
-const userName = prompt("Please enter your name:");
-if (userName) {
-    document.getElementById("welcomeMessage").textContent =
-        `Welcome to my portfolio, ${userName}!`;
-}
-
-/* Populate Skills List */
 const skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
 const skillsList = document.getElementById("skillsList");
-
 skills.forEach(skill => {
-    const li = document.createElement("li");
-    li.textContent = skill;
-    skillsList.appendChild(li);
+  const li = document.createElement("li");
+  li.textContent = skill;
+  skillsList.appendChild(li);
 });
 
-/* Modify Existing Elements */
-document.querySelector("#about h2").style.color = "#333";
-document.getElementById("featured")
-.classList.add("highlight-border");
-
-/* Dynamically Add New Project Message */
-const newProjectMessage = document.createElement("p");
-newProjectMessage.textContent =
-    "Recently, I built a Target Heart Rate Calculator using JavaScript.";
-document.getElementById("projects")
-.appendChild(newProjectMessage);
-
-/* Delayed Notification */
-setTimeout(() => {
-    const notification = document.createElement("div");
-    notification.className = "notification";
-    notification.textContent =
-        "Welcome! Check out my latest JavaScript project below.";
-    document.body.insertBefore(notification, document.body.firstChild);
-}, 2000);
-
-/* Dark Mode Toggle */
-document.getElementById("darkToggle")
-.addEventListener("change", () => {
-    document.body.classList.toggle("dark-mode");
+const toggle = document.getElementById("darkToggle");
+const savedMode = localStorage.getItem("darkMode");
+if (savedMode === "enabled") {
+  document.body.classList.add("dark-mode");
+  toggle.checked = true;
+}
+toggle.addEventListener("change", () => {
+  if (toggle.checked) {
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("darkMode", "enabled");
+  } else {
+    document.body.classList.remove("dark-mode");
+    localStorage.setItem("darkMode", "disabled");
+  }
 });
-
-/* Timed Confirmation for Contact Form */
-const form = document.getElementById("contactForm");
-const statusMessage = document.getElementById("statusMessage");
-
-form.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    statusMessage.textContent = "Sending message...";
-    statusMessage.style.color = "blue";
-
-    setTimeout(() => {
-        statusMessage.textContent =
-            `Message sent successfully! Thank you, ${nameInput.value}.`;
-        statusMessage.style.color = "green";
-    }, 3000);
-
-});
-
 </script>
 
 </body>
