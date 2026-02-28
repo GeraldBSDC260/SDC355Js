@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Author: [Your Name]
+    Date: [Today's Date]
+    Purpose: This exercise uses cookies to count how many times
+             a user has visited the page and display the date/time
+             of their last visit.
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counting Visits</title>
+  <style>
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      margin: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Name, Counting Visits</h1>
+  <p id="visitCountMsg"></p>
+  <p id="lastVisitMsg"></p>
+
+  <script>
+    "use strict";
+
+    // Function to get a cookie by its name
+    function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (let i = 0; i < cookies.length; i++) {
+        const parts = cookies[i].split("=");
+        if (parts[0] === name) {
+          return decodeURIComponent(parts[1]);
+        }
+      }
+      return "";
+    }
+
+    // Function to set a cookie
+    function setCookie(name, value, days = 365) {
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + d.toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+    }
+
+    // Create a readable date/time like "Wednesday 8/20/2025 at 23:45:30"
+    function getFormattedDate() {
+      const now = new Date();
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayName = days[now.getDay()];
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      const year = now.getFullYear();
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const seconds = now.getSeconds().toString().padStart(2, "0");
+      return `${dayName} ${month}/${date}/${year} at ${hours}:${minutes}:${seconds}`;
+    }
+
+    // Message elements
+    const visitCountMsg = document.getElementById("visitCountMsg");
+    const lastVisitMsg = document.getElementById("lastVisitMsg");
+
+    // Retrieve cookie value (it holds count + timestamp)
+    let visitInfo = getCookie("visitinfo");
+    let visitCount = 1;
+    let lastVisitText = "";
+
+    if (visitInfo === "") {
+      // First visit
+      visitCountMsg.textContent = "Your Name, this is your first visit.";
+    } else {
+      // Returning visitor
+      const parts = visitInfo.split(" ");
+      visitCount = parseInt(parts[0]) + 1; // increase visit count
+
+      // Extract the remaining text (the last visit date/time)
+      lastVisitText = parts.slice(1).join(" ");
+
+      visitCountMsg.textContent = `Your name, you have visited this page ${visitCount} times.`;
+      lastVisitMsg.textContent = `Your last visit was ${lastVisitText}`;
+    }
+
+    // Save new cookie with updated count and current timestamp
+    const now = getFormattedDate();
+    const newInfo = `${visitCount} ${now}`;
+    setCookie("visitinfo", newInfo);
+  </script>
+</body>
+</html>
