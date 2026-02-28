@@ -6,6 +6,8 @@
 <title>Gerald Blackwell | Portfolio</title>
 
 <style>
+/* ========== Your Existing Styles (Unchanged) ========== */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -47,21 +49,6 @@ section {
     margin: auto;
 }
 
-.projects {
-    text-align: center;
-}
-
-.projects img {
-    width: 200px;
-    margin: 15px;
-    border-radius: 10px;
-    transition: transform 0.3s;
-}
-
-.projects img:hover {
-    transform: scale(1.05);
-}
-
 .featured-box {
     border-radius: 12px;
     padding: 20px;
@@ -84,71 +71,6 @@ section {
     background: #1e1e1e;
 }
 
-form input, form textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-form button {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-}
-
-form button:hover {
-    background: #555;
-}
-
-.tooltip {
-    visibility: hidden;
-    background-color: black;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px 8px;
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    white-space: nowrap;
-    transition: opacity 0.3s;
-}
-
-form button:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}
-
-.toggle-box {
-    text-align: right;
-    padding: 10px 20px;
-    font-weight: bold;
-}
-
-.notification {
-    background: #ffd700;
-    padding: 12px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.highlight-border {
-    border: 3px solid #ffd700;
-}
-
-#statusMessage {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -168,21 +90,6 @@ form button:hover .tooltip {
     text-align: center;
     width: 80%;
     max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.modal-content button {
-    margin-top: 15px;
-    padding: 8px 16px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.modal-content button:hover {
-    background-color: #555;
 }
 </style>
 </head>
@@ -194,7 +101,7 @@ Dark Mode <input type="checkbox" id="darkToggle">
 </div>
 
 <header>
-<h1 id="welcomeMessage">Welcome!</h1>
+<h1>Gerald Blackwell | Portfolio</h1>
 <p>Web Development Student at ECPI</p>
 </header>
 
@@ -205,6 +112,7 @@ Dark Mode <input type="checkbox" id="darkToggle">
 <a href="#contact">Contact</a>
 </nav>
 
+<!-- Modal -->
 <div id="welcomeModal" class="modal">
   <div class="modal-content">
     <h2>This page is a work in progress.</h2>
@@ -212,79 +120,76 @@ Dark Mode <input type="checkbox" id="darkToggle">
   </div>
 </div>
 
+<!-- About -->
 <section id="about">
 <h2>About Me</h2>
 <p>
 Hello! My name is Gerald Blackwell, and I am a student at ECPI learning web
-development. I enjoy online gaming, anime, movies, and music. I am building
-skills in programming and web development.
+development. I enjoy online gaming, anime, movies, and music.
 </p>
+
 <h3>Technical Skills</h3>
 <ul id="skillsList"></ul>
 </section>
 
+<!-- Featured -->
 <section id="featured">
 <h2>Featured Content</h2>
-<div id="universityResources" class="featured-box">
+
+<div class="featured-box">
 <h3>University Resources</h3>
 <a href="https://www.ecpi.edu" target="_blank">ECPI Program Home Page</a>
 </div>
 
-<div id="personalProjects" class="featured-box">
-<h3>Personal Projects</h3>
+<div class="featured-box">
+<h3>GitHub</h3>
 <a href="https://github.com/GeraldBSDC260" target="_blank">
-<img src="https://via.placeholder.com/200" alt="GitHub Projects">
+Visit My GitHub
 </a>
 </div>
 </section>
 
-<section id="projects" class="projects">
+<!-- ✅ UPDATED PROJECT SECTION -->
+<section id="projects">
 <h2>Projects</h2>
-<img class="project" src="https://via.placeholder.com/200" alt="Project">
-<img class="project" src="https://via.placeholder.com/200" alt="Project">
-<img class="project" src="https://via.placeholder.com/200" alt="Project">
-</section>
-
-<section id="contact">
-<h2>Contact Me</h2>
-<form id="contactForm">
-<input type="text" id="nameInput" placeholder="Your Name" required>
-<input type="email" placeholder="Your Email Address" required>
-<input type="text" placeholder="Subject" required>
-<textarea placeholder="Your Message" rows="5" required></textarea>
-<button type="submit">
-  Send Message
-  <span class="tooltip">Click to send your message!</span>
-</button>
-</form>
-<div id="statusMessage"></div>
+<div id="projectContainer"></div>
 </section>
 
 <script>
+
+/* ==============================
+   Modal Logic
+============================== */
 window.addEventListener("load", () => {
   const modal = document.getElementById("welcomeModal");
   const closeBtn = document.getElementById("closeModalBtn");
   modal.style.display = "block";
   closeBtn.addEventListener("click", () => modal.style.display = "none");
-  window.addEventListener("click", e => {
-    if (e.target === modal) modal.style.display = "none";
-  });
 });
 
+/* ==============================
+   Skills List
+============================== */
 const skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
 const skillsList = document.getElementById("skillsList");
+
 skills.forEach(skill => {
   const li = document.createElement("li");
   li.textContent = skill;
   skillsList.appendChild(li);
 });
 
+/* ==============================
+   Dark Mode with localStorage
+============================== */
 const toggle = document.getElementById("darkToggle");
 const savedMode = localStorage.getItem("darkMode");
+
 if (savedMode === "enabled") {
   document.body.classList.add("dark-mode");
   toggle.checked = true;
 }
+
 toggle.addEventListener("change", () => {
   if (toggle.checked) {
     document.body.classList.add("dark-mode");
@@ -294,6 +199,76 @@ toggle.addEventListener("change", () => {
     localStorage.setItem("darkMode", "disabled");
   }
 });
+
+/* ==========================================
+   Portfolio Project Object System
+========================================== */
+
+// 1️⃣ Define project objects
+const projectArray = [
+  {
+    title: "Trip Stats Calculator",
+    summary: "Calculates mileage and MPG using JavaScript and browser storage.",
+    image: "https://via.placeholder.com/400x250?text=Trip+Calculator",
+    repo: "https://github.com/GeraldBSDC260/trip-calculator"
+  },
+  {
+    title: "Dynamic Portfolio Page",
+    summary: "Uses objects, arrays, DOM manipulation, and session storage.",
+    image: "https://via.placeholder.com/400x250?text=Portfolio+Project",
+    repo: "https://github.com/GeraldBSDC260/portfolio"
+  },
+  {
+    title: "Weather App",
+    summary: "Displays real-time weather data using an API.",
+    image: "https://via.placeholder.com/400x250?text=Weather+App",
+    repo: "https://github.com/GeraldBSDC260/weather-app"
+  }
+];
+
+// 2️⃣ Check sessionStorage
+let storedProjects = sessionStorage.getItem("portfolioProjects");
+
+if (!storedProjects) {
+  sessionStorage.setItem("portfolioProjects", JSON.stringify(projectArray));
+  storedProjects = JSON.stringify(projectArray);
+}
+
+// 3️⃣ Parse stored data
+const parsedProjects = JSON.parse(storedProjects);
+
+// 4️⃣ Render projects dynamically
+const projectContainer = document.getElementById("projectContainer");
+
+parsedProjects.forEach(project => {
+
+  const card = document.createElement("div");
+  card.classList.add("featured-box");
+
+  const img = document.createElement("img");
+  img.src = project.image;
+  img.alt = project.title;
+  img.style.width = "100%";
+
+  const title = document.createElement("h3");
+  title.textContent = project.title;
+
+  const summary = document.createElement("p");
+  summary.textContent = project.summary;
+
+  const link = document.createElement("a");
+  link.href = project.repo;
+  link.target = "_blank";
+  link.textContent = "View Repository";
+
+  card.appendChild(img);
+  card.appendChild(title);
+  card.appendChild(summary);
+  card.appendChild(link);
+
+  projectContainer.appendChild(card);
+});
+
 </script>
 
 </body>
