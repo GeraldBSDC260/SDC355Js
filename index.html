@@ -1,99 +1,458 @@
-/* ==========================================
-   Portfolio Project Object System
-========================================== */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerald Blackwell | Portfolio</title>
 
-/* ==========================================
-   STEP 1: Define Project Data Objects
-   Each object represents one portfolio project
-========================================== */
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #fafafa;
+      color: #222;
+      transition: background 0.3s, color 0.3s;
+    }
 
-const projectArray = [
-  {
-    title: "Trip Stats Calculator",
-    summary: "Calculates mileage and MPG using JavaScript and browser storage.",
-    image: "https://via.placeholder.com/400x250?text=Trip+Calculator",
-    repo: "https://github.com/GeraldBSDC260/SDC355Js/blob/f3ad3d442253e2489257082971c6adbf93c5157f/TripCalc.html"
-  },
-  {
-    title: "Counting Visits",
-    summary: "collecting data about how users interact with a website or application, including information such as the number of visits",
-    image: "https://via.placeholder.com/400x250?text=Portfolio+Project",
-    repo: "https://github.com/GeraldBSDC260/SDC355Js/blob/3b039d476837053b9f179c094c44c14354f304d9/CountingVisits.html"
-  },
-  {
-    title: "Custom Object",
-    summary: "pizza order form and an order summary section. The form will allow a user to enter delivery details, which you will store inside a custom JavaScript object.",
-    image: "https://via.placeholder.com/400x250?text=Weather+App",
-    repo: "https://github.com/GeraldBSDC260/SDC355Js/blob/3b039d476837053b9f179c094c44c14354f304d9/CustomObject.html"
-  }
-];
+    header {
+      background: linear-gradient(135deg, #222, #444);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
 
+    nav {
+      background-color: #333;
+      padding: 1rem;
+      text-align: center;
+    }
 
-/* ==========================================
-   STEP 2: Store Data in Session Storage
-   Convert array to JSON string and store it
-   ONLY if it does not already exist
-========================================== */
+    nav a {
+      color: white;
+      margin: 0 18px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
 
-let storedProjects = sessionStorage.getItem("portfolioProjects");
+    nav a:hover {
+      color: #ffd700;
+    }
 
-if (!storedProjects) {
-  sessionStorage.setItem("portfolioProjects", JSON.stringify(projectArray));
-  storedProjects = sessionStorage.getItem("portfolioProjects");
-}
+    section {
+      padding: 2.5rem;
+      max-width: 900px;
+      margin: auto;
+    }
 
+    .projects {
+      text-align: center;
+    }
 
-/* ==========================================
-   STEP 3: Retrieve and Parse Data
-   Convert stored JSON string back into
-   usable JavaScript objects
-========================================== */
+    .featured-box {
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
 
-const parsedProjects = JSON.parse(storedProjects);
+    .dark-mode {
+      background: #121212;
+      color: #f2f2f2;
+    }
 
+    .dark-mode header,
+    .dark-mode nav {
+      background: black;
+    }
 
-/* ==========================================
-   STEP 4: Dynamically Render Projects
-   Generate UI components from stored data
-========================================== */
+    .dark-mode .featured-box {
+      background: #1e1e1e;
+    }
 
-const projectContainer = document.getElementById("projectContainer");
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-function renderProjects(projects) {
+    form button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+    }
 
-  // Clear existing content before rendering
-  projectContainer.innerHTML = "";
+    form button:hover {
+      background: #555;
+    }
 
-  // Loop through project array
-  projects.forEach(project => {
+    .tooltip {
+      visibility: hidden;
+      background-color: black;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px 8px;
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      white-space: nowrap;
+      transition: opacity 0.3s;
+    }
 
-    const card = document.createElement("div");
-    card.classList.add("featured-box");
+    form button:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
 
-    const img = document.createElement("img");
-    img.src = project.image;
-    img.alt = project.title;
-    img.style.width = "100%";
+    .toggle-box {
+      text-align: right;
+      padding: 10px 20px;
+      font-weight: bold;
+    }
 
-    const title = document.createElement("h3");
-    title.textContent = project.title;
+    .notification {
+      background: #ffd700;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
 
-    const summary = document.createElement("p");
-    summary.textContent = project.summary;
+    .highlight-border {
+      border: 3px solid #ffd700;
+    }
 
-    const link = document.createElement("a");
-    link.href = project.repo;
-    link.target = "_blank";
-    link.textContent = "View Repository";
+    #statusMessage {
+      margin-top: 10px;
+      font-weight: bold;
+    }
 
-    card.appendChild(img);
-    card.appendChild(title);
-    card.appendChild(summary);
-    card.appendChild(link);
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+    }
 
-    projectContainer.appendChild(card);
-  });
-}
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
 
-// Call render function
-renderProjects(parsedProjects);
+    .modal-content button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background-color: #555;
+    }
+
+    /* =================================================
+       NEW: Dynamic project card layout for assignment
+       ================================================= */
+    #projectsContainer{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .project-card{
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .dark-mode .project-card{
+      background: #1e1e1e;
+    }
+
+    .project-card img{
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .project-card a{
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: bold;
+      color: inherit;
+    }
+
+    .project-card a:hover{
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="toggle-box">
+    Dark Mode <input type="checkbox" id="darkToggle">
+  </div>
+
+  <header>
+    <h1 id="welcomeMessage">Welcome!</h1>
+    <p>Web Development Student at ECPI</p>
+  </header>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#featured">Featured</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div id="welcomeModal" class="modal">
+    <div class="modal-content">
+      <h2>This page is a work in progress.</h2>
+      <button id="closeModalBtn">Close</button>
+    </div>
+  </div>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>
+      Hello! My name is Gerald Blackwell, and I am a student at ECPI learning web
+      development. I enjoy online gaming, anime, movies, and music. I am building
+      skills in programming and web development.
+    </p>
+
+    <h3>Technical Skills</h3>
+    <ul id="skillsList"></ul>
+  </section>
+
+  <section id="featured">
+    <h2>Featured Content</h2>
+
+    <div id="universityResources" class="featured-box">
+      <h3>University Resources</h3>
+      <a href="https://www.ecpi.edu" target="_blank" rel="noopener noreferrer">ECPI Program Home Page</a>
+    </div>
+
+    <div id="personalProjects" class="featured-box">
+      <h3>Personal Projects</h3>
+      <a href="https://github.com/GeraldBSDC260" target="_blank" rel="noopener noreferrer">
+        <img src="https://via.placeholder.com/200" alt="GitHub Projects">
+      </a>
+    </div>
+  </section>
+
+  <!-- =================================================
+       UPDATED: Projects section is now rendered by JS
+       ================================================= -->
+  <section id="projects" class="projects">
+    <h2>Projects</h2>
+
+    <!-- JS will render project cards here -->
+    <div id="projectsContainer"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form id="contactForm">
+      <input type="text" id="nameInput" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email Address" required>
+      <input type="text" placeholder="Subject" required>
+      <textarea placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">
+        Send Message
+        <span class="tooltip">Click to send your message!</span>
+      </button>
+    </form>
+    <div id="statusMessage"></div>
+  </section>
+
+  <script>
+    /*
+      Name: Gerald Blackwell
+      Date: 2026-02-28
+      Purpose: Portfolio page interactions + Dynamic Projects section using JSON and sessionStorage.
+    */
+
+    // ======================
+    // Modal (existing feature)
+    // ======================
+    window.addEventListener("load", () => {
+      const modal = document.getElementById("welcomeModal");
+      const closeBtn = document.getElementById("closeModalBtn");
+
+      modal.style.display = "block";
+
+      closeBtn.addEventListener("click", () => (modal.style.display = "none"));
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+    });
+
+    // ==========================
+    // Skills list (existing feature)
+    // ==========================
+    const skills = ["HTML", "CSS", "JavaScript", "Git", "GitHub"];
+    const skillsList = document.getElementById("skillsList");
+    skills.forEach((skill) => {
+      const li = document.createElement("li");
+      li.textContent = skill;
+      skillsList.appendChild(li);
+    });
+
+    // ==========================
+    // Dark mode (existing feature)
+    // ==========================
+    const toggle = document.getElementById("darkToggle");
+    const savedMode = localStorage.getItem("darkMode");
+
+    if (savedMode === "enabled") {
+      document.body.classList.add("dark-mode");
+      toggle.checked = true;
+    }
+
+    toggle.addEventListener("change", () => {
+      if (toggle.checked) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("darkMode", "enabled");
+      } else {
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("darkMode", "disabled");
+      }
+    });
+
+    // =========================================================
+    // ASSIGNMENT PART: Custom Objects + sessionStorage + JSON + DOM
+    // =========================================================
+
+    // 1) Define at least three project objects
+    const project1 = {
+      title: "TripCalc",
+      summary: "A calculator web app that computes travel budgets and expenses.",
+      imageUrl: "https://via.placeholder.com/600x350?text=TripCalc",
+      repoUrl: "https://github.com/GeraldBSDC260/TripCalc"
+    };
+
+    const project2 = {
+      title: "Counting Visits",
+      summary: "A webpage that tracks visits using cookies and JavaScript logic.",
+      imageUrl: "https://via.placeholder.com/600x350?text=Counting+Visits",
+      repoUrl: "https://github.com/GeraldBSDC260/Counting-Visits"
+    };
+
+    const project3 = {
+      title: "Custom Object",
+      summary: "A project demonstrating how to create and use custom JavaScript objects.",
+      imageUrl: "https://via.placeholder.com/600x350?text=Custom+Object",
+      repoUrl: "https://github.com/GeraldBSDC260/Custom-Object"
+    };
+
+    // 2) Define an array to contain the objects
+    const defaultProjects = [project1, project2, project3];
+
+    // Key used for sessionStorage
+    const STORAGE_KEY = "portfolioProjects";
+
+    // 3) Store and parse information (JSON.stringify / JSON.parse)
+    function getProjectsFromSession() {
+      const stored = sessionStorage.getItem(STORAGE_KEY);
+
+      // On page load, check if data exists in session storage
+      if (!stored) {
+        // If no data exists, store the project array in session storage
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects));
+        return defaultProjects;
+      }
+
+      // If data exists, retrieve and parse it
+      try {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : defaultProjects;
+      } catch (err) {
+        console.error("Error parsing sessionStorage JSON. Resetting defaults.", err);
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects));
+        return defaultProjects;
+      }
+    }
+
+    // 4) Render projects dynamically
+    function renderProjects(projects) {
+      // Select the project section using a DOM selector
+      const container = document.querySelector("#projectsContainer");
+
+      if (!container) {
+        console.error("Missing #projectsContainer element in HTML.");
+        return;
+      }
+
+      container.innerHTML = "";
+
+      // Loop and dynamically create DOM elements
+      projects.forEach((project) => {
+        const card = document.createElement("article");
+        card.className = "project-card";
+
+        const img = document.createElement("img");
+        img.src = project.imageUrl;
+        img.alt = `${project.title} preview`;
+        img.loading = "lazy";
+
+        const title = document.createElement("h3");
+        title.textContent = project.title;
+
+        const summary = document.createElement("p");
+        summary.textContent = project.summary;
+
+        const link = document.createElement("a");
+        link.href = project.repoUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "View Repository";
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(summary);
+        card.appendChild(link);
+
+        container.appendChild(card);
+      });
+    }
+
+    // Run on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const projects = getProjectsFromSession();
+      renderProjects(projects);
+    });
+  </script>
+
+</body>
+</html>
